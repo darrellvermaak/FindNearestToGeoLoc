@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindNearestToGeoLocation", "FIndNearestToGeoLocation\FindNearestToGeoLocation.csproj", "{5BC0D983-0F96-4136-A410-FC0E310CB89B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{481B3656-2A2B-477D-9C93-E200BB2D90D8}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindNearestToGeoLocationTests", "FindNearestToGeoLocationTests\FindNearestToGeoLocationTests.csproj", "{6D2B6F80-2AD2-4496-85BB-239CD046C628}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Debug|x64.ActiveCfg = Debug|x64
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Debug|x64.Build.0 = Debug|x64
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Release|x64.ActiveCfg = Release|x64
+		{5BC0D983-0F96-4136-A410-FC0E310CB89B}.Release|x64.Build.0 = Release|x64
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Debug|x64.ActiveCfg = Debug|x64
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Debug|x64.Build.0 = Debug|x64
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Release|x64.ActiveCfg = Release|x64
+		{6D2B6F80-2AD2-4496-85BB-239CD046C628}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {182447E1-A744-427E-B7D2-19582B2730D5}
+	EndGlobalSection
+EndGlobal
