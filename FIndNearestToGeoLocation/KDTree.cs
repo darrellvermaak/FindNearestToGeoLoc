@@ -39,13 +39,25 @@ namespace FindNearestToGeoLocation
 
             if (axis == 0)
             {
-                GEOSortLat geoSortLat = new GEOSortLat();
-                vdpList.Sort(geoSortLat);
+                // GEOSortLat geoSortLat = new GEOSortLat();
+                if(vdpList.Count > 37500)
+                {
+                    vdpList = vdpList.AsParallel().OrderBy(x => x.Latitude).ToList();
+                } else
+                {
+                    vdpList.Sort((x,y) => x.Latitude.CompareTo(y.Latitude));
+                }
             }
             else
             {
-                GEOSortLon geoSortLon = new GEOSortLon();
-                vdpList.Sort(geoSortLon);
+                // GEOSortLon geoSortLon = new GEOSortLon();
+                if(vdpList.Count > 37500)
+                {
+                    vdpList = vdpList.AsParallel().OrderBy(x => x.Longitude).ToList();
+                } else
+                {
+                    vdpList.Sort((x, y) => x.Longitude.CompareTo(y.Longitude));
+                }
             }
 
             int i = (int) Math.Floor(vdpList.Count * 0.5);

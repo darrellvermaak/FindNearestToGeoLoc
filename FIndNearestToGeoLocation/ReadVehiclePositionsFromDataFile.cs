@@ -12,6 +12,7 @@ namespace FindNearestToGeoLocation
         static BinaryReader? binaryReader;
         private long dataFileLength;
         public VehicleDataPoint vdp = new VehicleDataPoint();
+        private StringBuilder stringBuilder = new StringBuilder();
 
         public ReadVehiclePositionsFromDataFile()
         {
@@ -24,13 +25,15 @@ namespace FindNearestToGeoLocation
         {
             if (binaryReader.BaseStream.Position < dataFileLength)
             {
+                stringBuilder.Clear();
                 vdp.VehicleReg = "";
                 vdp.VehicleID = binaryReader.ReadInt32();
                 char nextChar;
                 while ((nextChar = binaryReader.ReadChar()) != '\0')
                 {
-                    vdp.VehicleReg = vdp.VehicleReg + nextChar;
+                    stringBuilder.Append(nextChar);
                 }
+                vdp.VehicleReg = stringBuilder.ToString();
                 vdp.Latitude = binaryReader.ReadSingle();
                 vdp.Longitude = binaryReader.ReadSingle();
                 vdp.RecordedTimeUTC = binaryReader.ReadUInt64();

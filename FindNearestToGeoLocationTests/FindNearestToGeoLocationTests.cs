@@ -1,14 +1,53 @@
 using NUnit.Framework;
-using static FindNearestToGeoLocation.VehicleDataPoint;
+using System;
 
 namespace FindNearestToGeoLocation
 {
     public class FindNearestToGeoLocation
     {
+        List<VehicleDataPoint> lVDPList = new();
+
         [SetUp]
         public void Setup()
         {
+            VehicleDataPoint vdp;
+            int vehicleID;
+            string vehicleReg;
+            float lat;
+            float lon;
+            ulong recordedTimeUTC;
 
+            vehicleID = 864907;
+            vehicleReg = "3I - 388 XE";
+            lat = 32.344444F;
+            lon = -99.12403F;
+            recordedTimeUTC = 1668691785;
+            vdp = new(vehicleID, vehicleReg, lat, lon, recordedTimeUTC);
+            lVDPList.Add(vdp);
+
+            vehicleID = 835420;
+            vehicleReg = "77 - 0126 BV";
+            lat = 33.23224F;
+            lon = -100.21374F;
+            recordedTimeUTC = 1668691815;
+            vdp = new(vehicleID, vehicleReg, lat, lon, recordedTimeUTC);
+            lVDPList.Add(vdp);
+
+            vehicleID = 239701;
+            vehicleReg = "K2-080 CT";
+            lat = 34.54235F;
+            lon = -102.10086F;
+            recordedTimeUTC = 1668691784;
+            vdp = new(vehicleID, vehicleReg, lat, lon, recordedTimeUTC);
+            lVDPList.Add(vdp);
+            
+            vehicleID = 1;
+            vehicleReg = "25 - 750 QD";
+            lat = 35.01914F;
+            lon = -99.56651F;
+            recordedTimeUTC = 1668691766;
+            vdp = new(vehicleID, vehicleReg, lat, lon, recordedTimeUTC);
+            lVDPList.Add(vdp);
         }
 
         [Test]
@@ -41,111 +80,74 @@ namespace FindNearestToGeoLocation
             Assert.That(vdp.RecordedTimeUTC, Is.EqualTo(recordedTimeUTC));
         }
         [Test]
-        public void ShortListManager_Search_Tests()
+        public void Search_For_Nearest_Lat_Test()
         {
-            float[] testArray = { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61 };
-            VehicleDataPoint vdpTest = new(1, "25-750 QD",0,0,0);
-            Node testNode = new(0,0F,null, null, vdpTest);
-            List<Node> testList = new List<Node>();
-
-            for(int i = 0; i < testArray.Length; i++)
-            {
-                testNode = new(0, 0F, null, null, vdpTest);
-                testNode.DistanceFromSearchCoordinates = testArray[i];
-                testList.Add(testNode);
-            }
-            Node newTestNode = new(0, 0F, null, null, vdpTest);
-            newTestNode.DistanceFromSearchCoordinates = 2;
-            Assert.That(ShortListManager.Search(newTestNode, testList), Is.EqualTo(0));
-            newTestNode.DistanceFromSearchCoordinates = 61;
-            Assert.That(ShortListManager.Search(newTestNode, testList), Is.EqualTo(17));
-            newTestNode.DistanceFromSearchCoordinates = 23;
-            Assert.That(ShortListManager.Search(newTestNode, testList), Is.EqualTo(8));
-            newTestNode.DistanceFromSearchCoordinates = 1;
-            Assert.That(ShortListManager.Search(newTestNode, testList), Is.EqualTo(-1));
-            newTestNode.DistanceFromSearchCoordinates = 62;
-            Assert.That(ShortListManager.Search(newTestNode, testList), Is.EqualTo(-19));
-            newTestNode.DistanceFromSearchCoordinates = 10;
-            Assert.That(ShortListManager.Search(newTestNode, testList), Is.EqualTo(-5));
+            int index;
+            // lat equals the last data point in the list
+            index = SearchForNearestLocation.SearchLat(35.01914F, lVDPList);
+            Assert.That(index, Is.EqualTo(3));
+            // lat sllightly greater than the last data point in the list
+            index = SearchForNearestLocation.SearchLat(35.01915F, lVDPList);
+            Assert.That(index, Is.EqualTo(3));
+            // lat slightly less than the last data point in the list
+            index = SearchForNearestLocation.SearchLat(35.01913F, lVDPList);
+            Assert.That(index, Is.EqualTo(3));
+            // lat equals the third data point in the list
+            index = SearchForNearestLocation.SearchLat(34.54235F, lVDPList);
+            Assert.That(index, Is.EqualTo(2));
+            // lat sllightly greater than the third data point in the list
+            index = SearchForNearestLocation.SearchLat(34.54236F, lVDPList);
+            Assert.That(index, Is.EqualTo(2));
+            // lat slightly less than the third data point in the list
+            index = SearchForNearestLocation.SearchLat(34.54234F, lVDPList);
+            Assert.That(index, Is.EqualTo(2));
+            // lat equals the second data point in the list
+            index = SearchForNearestLocation.SearchLat(33.23224F, lVDPList);
+            Assert.That(index, Is.EqualTo(1));
+            // lat sllightly greater than the second data point in the list
+            index = SearchForNearestLocation.SearchLat(33.23225F, lVDPList);
+            Assert.That(index, Is.EqualTo(1));
+            // lat slightly less than the second data point in the list
+            index = SearchForNearestLocation.SearchLat(33.23223F, lVDPList);
+            Assert.That(index, Is.EqualTo(1));
+            // lat equals the first data point in the list
+            index = SearchForNearestLocation.SearchLat(32.344444F, lVDPList);
+            Assert.That(index, Is.EqualTo(0));
+            // lat sllightly greater than the first data point in the list
+            index = SearchForNearestLocation.SearchLat(32.344445F, lVDPList);
+            Assert.That(index, Is.EqualTo(0));
+            // lat slightly less than the first data point in the list
+            index = SearchForNearestLocation.SearchLat(32.344443F, lVDPList);
+            Assert.That(index, Is.EqualTo(0));
         }
         [Test]
-        public void ShortListManager_Insert_Tests()
+        public void Search_For_Nearest_Lon_Test()
         {
-            VehicleDataPoint vdpTest = new(1, "25-750 QD", 35.01914F, -99.56651F, 0);
-            Node testNode = new(0, 0F, null, null, vdpTest);
-            List<Node> testList = new List<Node>();
-
-            testNode.DistanceFromSearchCoordinates = 50;
-            List<Node> returnedList_A = ShortListManager.Insert(testNode, testList);
-            Assert.That(returnedList_A.Count, Is.EqualTo(1));
-            Assert.That(returnedList_A[0].DistanceFromSearchCoordinates, Is.EqualTo(50));
-
-            vdpTest = new (2, "7A-0157 DJ", 33.623158F, -102.35253F, 0);
-            testNode = new(0, 0F, null, null, vdpTest);
-            testNode.DistanceFromSearchCoordinates = 25;
-            List<Node>returnedList_B = ShortListManager.Insert(testNode, returnedList_A);
-            Assert.That(returnedList_B.Count, Is.EqualTo(2));
-            Assert.That(returnedList_B[0].DistanceFromSearchCoordinates, Is.EqualTo(25));
-            Assert.That(returnedList_B[0].DataPoint.VehicleID, Is.EqualTo(2));
-            Assert.That(returnedList_B[1].DistanceFromSearchCoordinates, Is.EqualTo(50));
-            Assert.That(returnedList_B[1].DataPoint.VehicleID, Is.EqualTo(1));
-        }
-        [Test]
-        public void Node_Create_Instance_Tests()
-        {
-            Node node = new(1, 1, null, null, null);
-            Assert.IsNotNull(node);
-            Assert.IsInstanceOf<Node>(node);
-        }
-        [Test]
-        public void KDTree_Tests()
-        {
-            KDTree kDTree = new KDTree();
-            List<VehicleDataPoint> vdpList = new List<VehicleDataPoint>();
-            Node? tree = kDTree.Buildrec(vdpList, 0);
-            Assert.IsNull(tree);
-
-            vdpList.Add(new VehicleDataPoint(1, "25-750 QD", 35.01914F, -99.56651F, 0));
-            tree = kDTree.Buildrec(vdpList, 0);
-            Assert.IsNotNull(tree);
-            Assert.IsInstanceOf<Node>(tree);
-            Assert.That(tree.DataPoint.VehicleID, Is.EqualTo(1));
-            Assert.That(tree.DataPoint.VehicleReg, Is.EqualTo("25-750 QD"));
-            Assert.That(tree.DataPoint.Latitude, Is.EqualTo(35.01914F));
-            Assert.That(tree.DataPoint.Longitude, Is.EqualTo(-99.56651F));
-            Assert.That(tree.DataPoint.RecordedTimeUTC, Is.EqualTo(0));
-            Console.WriteLine(tree.Split);
-
-            vdpList.Add(new VehicleDataPoint(2, "7A-0157 DJ", 33.623158F, -102.35253F, 0));
-            tree = kDTree.Buildrec(vdpList, 0);
-            Assert.IsNotNull(tree);
-            Assert.IsInstanceOf<Node>(tree);
-            Assert.That(tree.DataPoint.VehicleID, Is.EqualTo(1));
-            Assert.That(tree.DataPoint.VehicleReg, Is.EqualTo("25-750 QD"));
-            Assert.That(tree.DataPoint.Latitude, Is.EqualTo(35.01914F));
-            Assert.That(tree.DataPoint.Longitude, Is.EqualTo(-99.56651F));
-            Assert.That(tree.DataPoint.RecordedTimeUTC, Is.EqualTo(0));
-            Console.WriteLine(tree.Split);
-
-            Assert.IsNotNull(tree);
-            Assert.IsInstanceOf<Node>(tree.Left);
-            Assert.That(tree.Left.DataPoint.VehicleID, Is.EqualTo(2));
-            Assert.That(tree.Left.DataPoint.VehicleReg, Is.EqualTo("7A-0157 DJ"));
-            Assert.That(tree.Left.DataPoint.Latitude, Is.EqualTo(33.623158F));
-            Assert.That(tree.Left.DataPoint.Longitude, Is.EqualTo(-102.35253F));
-            Assert.That(tree.Left.DataPoint.RecordedTimeUTC, Is.EqualTo(0));
-            Console.WriteLine(tree.Split);
-
-            vdpList.Add(new VehicleDataPoint(3, "E1-50445 VI", 32.624306F, -99.52194F, 0));
-            tree = kDTree.Buildrec(vdpList, 0);
-            Assert.IsNotNull(tree);
-            Assert.IsInstanceOf<Node>(tree.Left);
-            Assert.That(tree.Right.DataPoint.VehicleID, Is.EqualTo(2));
-            Assert.That(tree.Right.DataPoint.VehicleReg, Is.EqualTo("7A-0157 DJ"));
-            Assert.That(tree.Right.DataPoint.Latitude, Is.EqualTo(33.623158F));
-            Assert.That(tree.Right.DataPoint.Longitude, Is.EqualTo(-102.35253F));
-            Assert.That(tree.Right.DataPoint.RecordedTimeUTC, Is.EqualTo(0));
-            Console.WriteLine(tree.Split);
+            int index;
+            index = SearchForNearestLocation.SearchLon(35.01914F, -99.56651F, 3, lVDPList);
+            Assert.That(index, Is.EqualTo(3));
+            index = SearchForNearestLocation.SearchLon(35.01915F, -99.56652F, 3, lVDPList);
+            Assert.That(index, Is.EqualTo(3));
+            index = SearchForNearestLocation.SearchLon(35.01913F, -99.56650F, 3, lVDPList);
+            Assert.That(index, Is.EqualTo(3));
+            index = SearchForNearestLocation.SearchLon(34.54235F, -102.10086F, 2, lVDPList);
+            Assert.That(index, Is.EqualTo(2));
+            index = SearchForNearestLocation.SearchLon(34.54236F, -102.10087F, 2, lVDPList);
+            Assert.That(index, Is.EqualTo(2));
+            index = SearchForNearestLocation.SearchLon(34.54234F, -102.10085F, 2, lVDPList);
+            Assert.That(index, Is.EqualTo(2));
+            index = SearchForNearestLocation.SearchLon(33.23224F, -100.21374F, 1, lVDPList);
+            Assert.That(index, Is.EqualTo(1));
+            index = SearchForNearestLocation.SearchLon(33.23225F, -100.21375F, 1, lVDPList);
+            Assert.That(index, Is.EqualTo(1));
+            index = SearchForNearestLocation.SearchLon(33.23223F, -100.21373F, 1, lVDPList);
+            Assert.That(index, Is.EqualTo(1));
+            index = SearchForNearestLocation.SearchLon(32.344444F, -99.12403F, 0, lVDPList);
+            Assert.That(index, Is.EqualTo(0));
+            index = SearchForNearestLocation.SearchLon(32.344445F, -99.12404F, 0, lVDPList);
+            Assert.That(index, Is.EqualTo(0));
+            index = SearchForNearestLocation.SearchLon(32.344443F, -99.12402F, 0, lVDPList);
+            Assert.That(index, Is.EqualTo(0));
         }
     }
 }
